@@ -6,6 +6,10 @@ RASM
 ## Goal
 The goal of this repository is it to create a simple plotter - along the lines of [Der Kritzler](http://tinkerlog.com/2011/09/02/der-kritzler/).
 
+## status (march 29th 2013)
+I just set up the github repository, so for now I will more or less randomly push code into the repository and only over time create a documentation etc. So if you have questions just write me MarcoPashkov AT gmail DOT com.
+
+
 ## Hardware
 * [Raspberry Pi](http://www.raspberrypi.org/) (thank you [PyCon 2013](https://us.pycon.org/2013/) for this AWESOME gift!!!)
 * [Arduino Uno](http://arduino.cc/)
@@ -31,5 +35,13 @@ values:
 ## top layer
 Using [pyserial](http://pyserial.sourceforge.net/), [flask](http://flask.pocoo.org/) and [processing.js](http://processingjs.org/) I want to build a small webserver that accepts vertor images and then directs the stepper motors to draw the image.
 
-## status
-I just set up the github repository, so for now I will more or less randomly push code into the repository and only over time create a documentation etc. So if you have questions just write me MarcoPashkov AT gmail DOT com.
+### Software Requirements
+* flask
+* pyserial
+* gunicorn
+
+How to start the server(of course with the correct raspberry pi IP-address/port):
+```bash
+cd ~/rasm/raspberrypi/
+gunicorn server:app --bind 192.168.1.8:8000 --workers 2
+```
