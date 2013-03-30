@@ -6,21 +6,35 @@
     <script type="text/javascript" src="/static/app.js"></script>
 </head>
 <body>
+    <form action="move" method="POST" id="arduino_move_form">
+        x <input type="float" name="x" value="{{ canvas.position.x }}"><br>
+        y <input type="float" name="y" value="{{ canvas.position.y }}"><br>
+        <input type="submit" value="set">
+    </form>
+
+
+    <form action="setup" method="POST" id="arduino_setup_form">
+        left <input type="float" name="left" value="{{ canvas.left }}"><br>
+        right <input type="float" name="right" value="{{ canvas.right }}"><br>
+        motors apart <input type="float" name="motors_apart" value="{{ canvas.motors_apart }}"><br>
+        <input type="submit" value="set">
+    </form>
+
     <form action="call" method="POST" id="arduino_run_form">
         motor <select name="motor">
-                <option value="1">1</option>
-                <option value="2">2</option>
+                <option value="1">RIGHT</option>
+                <option value="2">LEFT</option>
             </select><br>
         speed <input type="integer" name="speed" value="50"><br>
         steps <input type="integer" name="steps" value="50">
         direction   <select name="direction">
-                        <option value="1">forward</option>
-                        <option value="2">backward</option>
+                        <option value="1">UP</option>
+                        <option value="2">DOWN</option>
                     </select><br>
         style   <select name="style">
                     <option value="1">single</option>
                     <option value="2">dual</option>
-                    <option value="3">interleave</option>
+                    <option value="3" SELECTED>interleave</option>
                     <option value="4">microstep</option>
                 </select><br>
         <input type="submit" value="run on arduino">

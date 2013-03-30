@@ -1,38 +1,50 @@
 ### imports
 from flask import Flask, render_template, request, redirect, url_for
-import serial
+from canvas import Canvas
 
 ### flask setup
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
-### arduino connection setup
-arduino = serial.Serial("/dev/ttyACM0", 9600)
-
-def runCommand(motor, speed, steps, direction, style):
-    """send the message to the arduino and return the execution code"""
-    message = "{0};".format(",".join([motor, speed, steps, direction, style]))
-    code = arduino.write(message)
-    return code
+### setup canvas
+canvas = Canvas()
 
 ### webserver
 @app.route("/")
 def index():
     """render the control page"""
-    return render_template('index.html')
+    return render_template('index.html', canvas=canvas)
 
 @app.route("/call", methods=['POST'])
 def call():
     """parse any messages and run them on the arduino"""
     ### send command to arduino
     args = ["motor", "speed", "steps", "direction", "style"]
-    code = runCommand(*[request.form.get(v) for v in args])
+    code = canvas.runCommand(*[request.form.get(v) for v in args])
     
     ### gather messages return from arduino
-    message = ["return code: {0}".format(code),]
-    while arduino.inWaiting() > 0:
-        message.append(arduino.readline())
+    message = [ "position: {0}".format(canvas.position),
+                "l/r: ({0}: {1})".format(canvas.left, canvas.right),
+                "return code: {0}".format(code),]
+    while canvas.arduino.inWaiting() > 0:
+        message.append(canvas.arduino.readline())
     return render_template('message.html', message=message)
+
+@app.route("/setup", methods=['POST'])
+def setup():
+    """setup the geometry for the canvas"""
+    left = request.form.get("left")
+    right = request.form.get("right")
+    motors_apart = request.form.get("motors_apart")
+    canvas.updateGeometry(left=left, right=right, motors_apart=motors_apart)
+    return redirect(url_for("index"))
+
+@app.route("/move", methods=['POST'])
+def move():
+    x = request.form.get("x")
+    y = request.form.get("y")
+    canvas.moveTo(x, y)
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     ### start the server
