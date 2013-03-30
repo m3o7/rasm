@@ -2,9 +2,11 @@
 <head>
     <title>draw me</title>
     <script type="text/javascript" src="/static/processing-1.4.1.min.js"></script>
+    <script type="text/javascript" src="/static/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/static/app.js"></script>
 </head>
 <body>
-    <form action="call" method="POST">
+    <form action="call" method="POST" id="arduino_run_form">
         motor <select name="motor">
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -21,12 +23,9 @@
                     <option value="3">interleave</option>
                     <option value="4">microstep</option>
                 </select><br>
-        <input type="submit" value="Submit">
+        <input type="submit" value="run on arduino">
     </form>
-
-    {% for m in message %}
-        <div>{{ m }}</div>
-    {% endfor %}
+    <div id="debug_messages"></div>
 </body>
 </html>
 
