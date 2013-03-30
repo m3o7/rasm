@@ -20,7 +20,10 @@ class Canvas(object):
 
     def __init__(self, port="/dev/ttyACM0", baudrate=9600, **kwargs):
         ### arduino connection setup
-        self.arduino = serial.Serial(port=port, baudrate=baudrate, **kwargs)
+        try:
+            self.arduino = serial.Serial(port=port, baudrate=baudrate, **kwargs)
+        except serial.SerialException:
+            self.arduino = serial.Serial(port="/dev/ttyACM1", baudrate=baudrate, **kwargs)
 
         ### canvas geometry - constants
         self.length_per_rotation = 4.6 ### cm
@@ -30,8 +33,8 @@ class Canvas(object):
         self.motors_apart = 59.0 ### cm
 
         ### canvas geometry - variables
-        self.left = 0.0
-        self.right = 0.0
+        self.left = 50
+        self.right = 50
         self.position = Vector()
 
     def runCommand(self, motor, speed, steps, direction, style):
@@ -45,6 +48,7 @@ class Canvas(object):
 
         message = "{0};".format(",".join([str(int(motor)), str(int(speed)), str(int(steps)), str(int(direction_tmp)), str(int(style))]))
         code = self.arduino.write(message)
+
         self.__updatePositionAfterCommand__(motor, steps, direction)
         return code
 

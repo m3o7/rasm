@@ -26,8 +26,7 @@ def call():
     message = [ "position: {0}".format(canvas.position),
                 "l/r: ({0}: {1})".format(canvas.left, canvas.right),
                 "return code: {0}".format(code),]
-    while canvas.arduino.inWaiting() > 0:
-        message.append(canvas.arduino.readline())
+    
     return render_template('message.html', message=message)
 
 @app.route("/setup", methods=['POST'])
