@@ -7,11 +7,11 @@ RASM
 The goal of this repository is it to create a simple plotter - along the lines of [Der Kritzler](http://tinkerlog.com/2011/09/02/der-kritzler/).
 
 ## Hardware
-* Raspberry Pi (thank you PyCon 2013 for this AWESOME gift :-)
-* Arduino Uno
-* 1 x Adafruit Motor/Stepper/Servo Shield for Arduino kit (v1.2) [ID:81]
-* 2 x Stepper motor - 200 steps/rev, 12V 350mA[ID:324]
-* 2 x Aluminum GT2 Timing Pulley - 6mm Belt - 36 Tooth - 5mm Bore[ID:1253]
+* [Raspberry Pi](http://www.raspberrypi.org/) (thank you [PyCon 2013](https://us.pycon.org/2013/) for this AWESOME gift!!!)
+* [Arduino Uno](http://arduino.cc/)
+* 1 x [Adafruit Motor/Stepper/Servo Shield for Arduino kit (v1.2)](http://www.adafruit.com/products/81) [ID:81]
+* 2 x [Stepper motor - 200 steps/rev, 12V 350mA](http://www.adafruit.com/products/324) [ID:324]
+* 2 x [Aluminum GT2 Timing Pulley - 6mm Belt - 36 Tooth - 5mm Bore](http://www.adafruit.com/products/1253) [ID:1253]
 * & lots of cables
 
 ## Communication
