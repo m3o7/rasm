@@ -4,10 +4,6 @@
     <script type="text/javascript" src="/static/processing-1.4.1.min.js"></script>
 </head>
 <body>
-    {% for m in message %}
-        <div>{{ m }}</div>
-    {% endfor %}
-
     <form action="call" method="POST">
         motor <select name="motor">
                 <option value="1">1</option>
@@ -27,6 +23,10 @@
                 </select><br>
         <input type="submit" value="Submit">
     </form>
+
+    {% for m in message %}
+        <div>{{ m }}</div>
+    {% endfor %}
 </body>
 </html>
 

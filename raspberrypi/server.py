@@ -10,13 +10,17 @@ app.config.from_pyfile('config.py')
 arduino = serial.Serial("/dev/ttyACM0", 9600)
 
 def runCommand(motor, speed, steps, direction, style):
+    """send the message to the arduino and return the execution code"""
     message = "{0};".format(",".join([motor, speed, steps, direction, style]))
     print "running: {0}".format(message)
-    arduino.write(message)
+    code = arduino.write(message)
+    print "code: {0}".format(code)
+    return code
 
 ### webserver
 @app.route("/")
 def index():
+    """render the control page"""
     message = []
     while arduino.inWaiting() > 0:
         message.append(arduino.readline())
@@ -24,6 +28,7 @@ def index():
 
 @app.route("/call", methods=['POST'])
 def call():
+    """parse any messages and run them on the arduino"""
     ### send to arduino
     args = ["motor", "speed", "steps", "direction", "style"]
     runCommand(*[request.form.get(v) for v in args])
