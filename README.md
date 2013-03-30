@@ -29,4 +29,7 @@ values:
 * step-style: 1 (single), 2 (double), 3 (interleave), 4 (microsteps)
 
 ## top layer
-Using pyserial, flask and processing.js I want to build a small webserver that accepts vertor images and then directs the stepper motors to draw the image.
+Using [pyserial](http://pyserial.sourceforge.net/), [flask](http://flask.pocoo.org/) and [processing.js](http://processingjs.org/) I want to build a small webserver that accepts vertor images and then directs the stepper motors to draw the image.
+
+## status
+I just set up the github repository, so for now I will more or less randomly push code into the repository and only over time create a documentation etc. So if you have questions just write me MarcoPashkov AT gmail DOT com.
