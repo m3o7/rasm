@@ -1,0 +1,32 @@
+<html>
+<head>
+    <title>draw me</title>
+    <script type="text/javascript" src="/static/processing-1.4.1.min.js"></script>
+</head>
+<body>
+    {% for m in message %}
+        <div>{{ m }}</div>
+    {% endfor %}
+
+    <form action="call" method="POST">
+        motor <select name="motor">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select><br>
+        speed <input type="integer" name="speed" value="50"><br>
+        steps <input type="integer" name="steps" value="50">
+        direction   <select name="direction">
+                        <option value="1">forward</option>
+                        <option value="2">backward</option>
+                    </select><br>
+        style   <select name="style">
+                    <option value="1">single</option>
+                    <option value="2">dual</option>
+                    <option value="3">interleave</option>
+                    <option value="4">microstep</option>
+                </select><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+
