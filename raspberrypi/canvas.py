@@ -42,9 +42,9 @@ class Canvas(object):
 
         direction_tmp = None
         if int(motor) == LEFT:
-            direction_tmp = FORWARD if int(direction) == DOWN else BACKWARD
+            direction_tmp = FORWARD if int(direction) == UP else BACKWARD
         elif int(motor) == RIGHT:
-            direction_tmp = BACKWARD if int(direction) == DOWN else FORWARD
+            direction_tmp = BACKWARD if int(direction) == UP else FORWARD
 
         message = "{0};".format(",".join([str(int(motor)), str(int(speed)), str(int(steps)), str(int(direction_tmp)), str(int(style))]))
         code = self.arduino.write(message)
@@ -100,23 +100,61 @@ class Canvas(object):
         left_steps = int((new_left - self.left) / cm_per_step)
         right_steps = int((new_right - self.right) / cm_per_step)
 
-        motor_left_direction = FORWARD if left_steps < 0 else BACKWARD
-        motor_right_direction = FORWARD if right_steps > 0 else BACKWARD
+        motor_left_direction = UP if left_steps < 0 else DOWN
+        motor_right_direction = UP if right_steps < 0 else DOWN
 
-        step_size = 10
-        speed = 10
-        if left_steps < right_steps:
-            right_factor = float(right_steps)/left_steps;
-            for x in xrange(left_steps/step_size):
-                self.runCommand(motor=RIGHT, speed=speed, steps=abs(step_size*right_factor), direction=motor_right_direction, style=INTERLEAVE)
-                self.runCommand(motor=LEFT, speed=speed, steps=abs(step_size), direction=motor_left_direction, style=INTERLEAVE)
+        ### constants
+        speed = 100
+        stepsize = 2.0
+
+        print new_left, new_right
+        print left_steps, right_steps
+
+        left_turns = abs(int(left_steps/stepsize))
+        right_turns = abs(int(right_steps/stepsize))
+
+        turns = max(left_turns, right_turns)
+
+        left_per_turn = left_turns/float(turns)
+        right_per_turn = right_turns/float(turns)
+
+        ls = 0.
+        rs = 0.
+        for t in xrange(turns):
+            ls += left_per_turn
+            if int(ls) > 0:
+                print "LEFT:", int(ls), motor_left_direction
+                self.runCommand(motor=LEFT, speed=speed, steps=stepsize, direction=motor_left_direction, style=MICROSTEP)
+                ls = ls - int(ls)
                 time.sleep(0.1)
-        else:
-            left_factor = float(left_steps)/right_steps;
-            for x in xrange(right_steps/step_size):
-                self.runCommand(motor=RIGHT, speed=speed, steps=abs(step_size), direction=motor_right_direction, style=INTERLEAVE)
-                self.runCommand(motor=LEFT, speed=speed, steps=abs(step_size*left_factor), direction=motor_left_direction, style=INTERLEAVE)
+
+            rs += right_per_turn
+            if int(rs) > 0:
+                print "RIGHT:", int(rs), motor_right_direction
+                self.runCommand(motor=RIGHT, speed=speed, steps=stepsize, direction=motor_right_direction, style=MICROSTEP)
+                rs = rs - int(rs)
                 time.sleep(0.1)
+        
+        # if left_steps < right_steps:
+        #     overflow_steps = float(left_steps)/right_steps
+        #     current_overflow_steps = overflow_steps
+        #     for x in xrange(right_steps):
+        #         self.runCommand(motor=RIGHT, speed=speed, steps=1, direction=motor_right_direction, style=MICROSTEP)
+        #         if current_overflow_steps > 1:
+        #             self.runCommand(motor=LEFT, speed=speed, steps=1, direction=motor_left_direction, style=MICROSTEP)
+        #             current_overflow_steps -= 1
+        #         time.sleep(0.1)
+        #         current_overflow_steps += overflow_steps 
+        # else:
+        #     overflow_steps = float(left_steps)/right_steps
+        #     current_overflow_steps = overflow_steps
+        #     for x in xrange(left_steps):
+        #         if current_overflow_steps > 1:
+        #             self.runCommand(motor=RIGHT, speed=speed, steps=abs(step_size), direction=motor_right_direction, style=MICROSTEP)
+        #             current_overflow_steps -= 1
+        #         self.runCommand(motor=LEFT, speed=speed, steps=abs(step_size*left_factor), direction=motor_left_direction, style=MICROSTEP)
+        #         time.sleep(0.1)
+        #         current_overflow_steps += overflow_steps
 
 
 class Vector(object):
